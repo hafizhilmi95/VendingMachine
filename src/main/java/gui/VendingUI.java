@@ -5,8 +5,17 @@
  */
 package gui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import vending.Coiner;
 import vending.Drinks;
@@ -15,6 +24,7 @@ import vending.Drinks;
  *
  * @author imakit
  */
+
 public class VendingUI extends javax.swing.JFrame {
     double amount;
     double totalAmt;
@@ -33,6 +43,20 @@ public class VendingUI extends javax.swing.JFrame {
         initComponents();
     }
 
+    public Connection getConnection()
+    {
+        Connection con = null;
+        try {
+            con =DriverManager.getConnection("jdbc:mysql://localhost/vendmach_db","root","");
+            
+            return con;
+        } catch (SQLException ex) {
+            Logger.getLogger(VendingUI.class.getName()).log(Level.SEVERE, null, ex);
+            
+            return null;
+        }
+    } 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -64,6 +88,7 @@ public class VendingUI extends javax.swing.JFrame {
         option_four = new javax.swing.JRadioButton();
         option_five = new javax.swing.JRadioButton();
         select_drink = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
         selectedDrink = new javax.swing.JLabel();
         changeText = new javax.swing.JLabel();
         buyDrink_btn = new javax.swing.JButton();
@@ -72,15 +97,24 @@ public class VendingUI extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         refresh = new javax.swing.JButton();
         dispensed_txt = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("VENDING MACHINE UI");
         setBackground(new java.awt.Color(204, 204, 204));
         setName("VENDING MACHINE"); // NOI18N
+        getContentPane().setLayout(null);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("AMOUNT");
+        jLabel1.setToolTipText("");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(640, 180, 60, 14);
 
         amt_txt.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        getContentPane().add(amt_txt);
+        amt_txt.setBounds(700, 160, 150, 43);
 
         addTenCents.setText("INSERT RM 0.10");
         addTenCents.addActionListener(new java.awt.event.ActionListener() {
@@ -88,6 +122,8 @@ public class VendingUI extends javax.swing.JFrame {
                 addTenCentsActionPerformed(evt);
             }
         });
+        getContentPane().add(addTenCents);
+        addTenCents.setBounds(640, 40, 150, 45);
 
         addTwentyCents.setText("INSERT RM 0.20");
         addTwentyCents.addActionListener(new java.awt.event.ActionListener() {
@@ -95,6 +131,8 @@ public class VendingUI extends javax.swing.JFrame {
                 addTwentyCentsActionPerformed(evt);
             }
         });
+        getContentPane().add(addTwentyCents);
+        addTwentyCents.setBounds(840, 40, 139, 50);
 
         addFiftyCents.setText("INSERT RM 0.50");
         addFiftyCents.addActionListener(new java.awt.event.ActionListener() {
@@ -102,6 +140,8 @@ public class VendingUI extends javax.swing.JFrame {
                 addFiftyCentsActionPerformed(evt);
             }
         });
+        getContentPane().add(addFiftyCents);
+        addFiftyCents.setBounds(640, 100, 150, 41);
 
         addOneRinggit.setText("INSERT RM 1");
         addOneRinggit.addActionListener(new java.awt.event.ActionListener() {
@@ -109,6 +149,8 @@ public class VendingUI extends javax.swing.JFrame {
                 addOneRinggitActionPerformed(evt);
             }
         });
+        getContentPane().add(addOneRinggit);
+        addOneRinggit.setBounds(840, 100, 139, 41);
 
         jInternalFrame1.setTitle("SELECT A DRINK");
         jInternalFrame1.setToolTipText("");
@@ -146,6 +188,8 @@ public class VendingUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/drink.png"))); // NOI18N
+
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
         jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
         jInternalFrame1Layout.setHorizontalGroup(
@@ -156,13 +200,17 @@ public class VendingUI extends javax.swing.JFrame {
                     .addComponent(option_one)
                     .addComponent(option_three)
                     .addComponent(option_two))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(option_four)
                         .addComponent(option_five))
                     .addComponent(select_drink, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(95, 95, 95))
+            .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jInternalFrame1Layout.setVerticalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,17 +230,25 @@ public class VendingUI extends javax.swing.JFrame {
                     .addGroup(jInternalFrame1Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(select_drink)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        getContentPane().add(jInternalFrame1);
+        jInternalFrame1.setBounds(630, 220, 380, 340);
 
         selectedDrink.setBackground(new java.awt.Color(153, 153, 153));
         selectedDrink.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         selectedDrink.setForeground(new java.awt.Color(0, 51, 51));
         selectedDrink.setText("DRINK : ---");
+        getContentPane().add(selectedDrink);
+        selectedDrink.setBounds(640, 610, 269, 24);
 
         changeText.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         changeText.setForeground(new java.awt.Color(204, 0, 51));
         changeText.setText("CHANGE : ---");
+        getContentPane().add(changeText);
+        changeText.setBounds(900, 670, 113, 24);
 
         buyDrink_btn.setText("BUY DRINK");
         buyDrink_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -200,6 +256,8 @@ public class VendingUI extends javax.swing.JFrame {
                 buyDrink_btnActionPerformed(evt);
             }
         });
+        getContentPane().add(buyDrink_btn);
+        buyDrink_btn.setBounds(680, 710, 90, 47);
 
         cancel_btn.setText("CANCEL");
         cancel_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -207,10 +265,14 @@ public class VendingUI extends javax.swing.JFrame {
                 cancel_btnActionPerformed(evt);
             }
         });
+        getContentPane().add(cancel_btn);
+        cancel_btn.setBounds(790, 710, 80, 47);
 
         warningText.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         warningText.setForeground(new java.awt.Color(255, 0, 51));
         warningText.setText("*");
+        getContentPane().add(warningText);
+        warningText.setBounds(870, 160, 311, 24);
 
         jButton1.setText("EXIT");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -218,6 +280,8 @@ public class VendingUI extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(890, 710, 80, 47);
 
         refresh.setText("↻");
         refresh.addActionListener(new java.awt.event.ActionListener() {
@@ -225,88 +289,18 @@ public class VendingUI extends javax.swing.JFrame {
                 refreshActionPerformed(evt);
             }
         });
+        getContentPane().add(refresh);
+        refresh.setBounds(1030, 710, 43, 47);
 
         dispensed_txt.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         dispensed_txt.setForeground(new java.awt.Color(153, 0, 0));
         dispensed_txt.setText("DISPENSE : ---");
+        getContentPane().add(dispensed_txt);
+        dispensed_txt.setBounds(640, 650, 224, 51);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(118, 118, 118)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(amt_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(warningText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(110, 110, 110))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(dispensed_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(38, 38, 38)
-                                .addComponent(changeText))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(addTwentyCents, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(addTenCents, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(addFiftyCents, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(45, 45, 45)
-                                    .addComponent(addOneRinggit, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jInternalFrame1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(buyDrink_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cancel_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(refresh))
-                            .addComponent(selectedDrink, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(56, Short.MAX_VALUE))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(addTenCents, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-                    .addComponent(addTwentyCents, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addFiftyCents, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addOneRinggit, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(59, 59, 59)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(warningText)
-                        .addGap(18, 18, 18))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(amt_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(36, 36, 36)
-                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55)
-                .addComponent(selectedDrink)
-                .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dispensed_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(changeText)
-                        .addGap(11, 11, 11)))
-                .addGap(53, 53, 53)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buyDrink_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cancel_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/vendingMachine_cropped.jpg"))); // NOI18N
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(620, 10, 480, 820);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -368,23 +362,57 @@ public class VendingUI extends javax.swing.JFrame {
         option_five.setActionCommand(drinks.getDrink5());
         
         String x = btn_group.getSelection().getActionCommand();
-        
+        try{
+            Connection con =  getConnection();
+            PreparedStatement ps;
+            Statement st;
+            ResultSet rs;
+            
+            st = con.createStatement();
+            int PID=1;
+            String searchQuery = "SELECT * FROM `product` WHERE `PID` = "+PID+"";//CONCAT (`menuID`, `menuName`, `menuPrice`, `addDate`, `menuImg`) LIKE '%"+searchtxtbox+"%'";
+            rs = st.executeQuery(searchQuery);
         //Identify which radio button was selected.
         if (x.equals(drinks.getDrink1())){
+            PID=1;
+            
             amount = Double.parseDouble(amt_txt.getText());
             //compare coin amount to price and get change.
+            
             if (amount < drinks.getPrice1()){
                 changeText.setText("CHANGE : ----");
                 selectedDrink.setText("SELECTED DRINK : -----");
-                warningText.setText("Insufficient Amount for this drink");              
+                warningText.setText("Insufficient Amount for this drink");    
+                
             }
             else if (amount == drinks.getPrice1()){
+                
+                    while (rs.next())
+                    {
+                        float stock  =  Float.parseFloat(rs.getString("stock"));
+                        float newstock = stock - 1;
+                        String UpdateQuery = "UPDATE product SET stock ="+ newstock +"" ;
+                        ps = con.prepareStatement(UpdateQuery);
+                        ps.executeUpdate();
+                    }
+                
                     changeText.setText("CHANGE : RM0");
                     selectedDrink.setText("SELECTED DRINK : "+btn_group.getSelection().getActionCommand());
                     warningText.setText("✔");
                     dispensed_txt.setText("1 "+drinks.getDrink1()+" DISPENSED");
+                    
             }
             else{
+                
+                while (rs.next())
+                    {
+                        float stock  =  Float.parseFloat(rs.getString("stock"));
+                        float newstock = stock - 1;
+                        String UpdateQuery = "UPDATE product SET stock ="+ newstock +"" ;
+                        ps = con.prepareStatement(UpdateQuery);
+                        ps.executeUpdate();
+                    }
+                
                 change = amount - drinks.getPrice1();
                 changeText.setText("CHANGE RM: "+df.format(change));
                 warningText.setText("✔");
@@ -393,6 +421,7 @@ public class VendingUI extends javax.swing.JFrame {
             }
         }
         else if (x.equals(drinks.getDrink2())){
+            PID=2;
             amount = Double.parseDouble(amt_txt.getText());
             if (amount < drinks.getPrice2()){
                 changeText.setText("CHANGE : ----");
@@ -400,12 +429,32 @@ public class VendingUI extends javax.swing.JFrame {
                 warningText.setText("Insufficient Amount for this drink");
             }
             else if (amount == drinks.getPrice2()){
+                
+                while (rs.next())
+                    {
+                        float stock  =  Float.parseFloat(rs.getString("stock"));
+                        float newstock = stock -1;
+                        String UpdateQuery = "UPDATE product SET stock ="+ newstock +"" ;
+                        ps = con.prepareStatement(UpdateQuery);
+                        ps.executeUpdate();
+                    }
+                
                     warningText.setText("✔");
                     changeText.setText("CHANGE RM: 0");
                     dispensed_txt.setText("1 "+drinks.getDrink2()+" DISPENSED");
                     selectedDrink.setText("SELECTED DRINK : "+btn_group.getSelection().getActionCommand());
             }
             else{
+                
+                while (rs.next())
+                    {
+                        float stock  =  Float.parseFloat(rs.getString("stock"));
+                        float newstock = stock -1;
+                        String UpdateQuery = "UPDATE product SET stock ="+ newstock +"" ;
+                        ps = con.prepareStatement(UpdateQuery);
+                        ps.executeUpdate();
+                    }
+                
                 change = amount - drinks.getPrice2();                
                 warningText.setText("✔");
                 changeText.setText("CHANGE RM: "+df.format(change));
@@ -414,19 +463,41 @@ public class VendingUI extends javax.swing.JFrame {
             }
         }
         else if (x.equals(drinks.getDrink3())){
+            PID=3;
             amount = Double.parseDouble(amt_txt.getText());
             if (amount < drinks.getPrice3()){
                 changeText.setText("CHANGE : ----");
                 selectedDrink.setText("SELECTED DRINK : -----");
                 warningText.setText("Insufficient Amount for this drink");
+                
             }
             else if (amount == drinks.getPrice3()){
+                
+                while (rs.next())
+                    {
+                        float stock  =  Float.parseFloat(rs.getString("stock"));
+                        float newstock = stock -1;
+                        String UpdateQuery = "UPDATE product SET stock ="+ newstock +"" ;
+                        ps = con.prepareStatement(UpdateQuery);
+                        ps.executeUpdate();
+                    }
+                
                     warningText.setText("✔");
                     changeText.setText("CHANGE : RM0");
                     dispensed_txt.setText("1 "+drinks.getDrink3()+" DISPENSED");
                     selectedDrink.setText("SELECTED DRINK : "+btn_group.getSelection().getActionCommand());
             }
             else{
+                
+                while (rs.next())
+                    {
+                        float stock  =  Float.parseFloat(rs.getString("stock"));
+                        float newstock = stock -1;
+                        String UpdateQuery = "UPDATE product SET stock ="+ newstock +"" ;
+                        ps = con.prepareStatement(UpdateQuery);
+                        ps.executeUpdate();
+                    }
+                
                 change = amount - drinks.getPrice3();
                 warningText.setText("✔");
                 changeText.setText("CHANGE RM: "+df.format(change));
@@ -435,6 +506,7 @@ public class VendingUI extends javax.swing.JFrame {
             }
         }
         else if (x.equals(drinks.getDrink4())){
+            PID=4;
             amount = Double.parseDouble(amt_txt.getText());
             if (amount < drinks.getPrice4()){
                 changeText.setText("CHANGE : ----");
@@ -442,12 +514,32 @@ public class VendingUI extends javax.swing.JFrame {
                 warningText.setText("Insufficient Amount for this drink");
             }
             else if (amount == drinks.getPrice4()){
+                
+                while (rs.next())
+                    {
+                        float stock  =  Float.parseFloat(rs.getString("stock"));
+                        float newstock = stock -1;
+                        String UpdateQuery = "UPDATE product SET stock ="+ newstock +"" ;
+                        ps = con.prepareStatement(UpdateQuery);
+                        ps.executeUpdate();
+                    }
+                
                     warningText.setText("✔");
                     changeText.setText("CHANGE : RM0");
                     dispensed_txt.setText("1 "+drinks.getDrink4()+" DISPENSED");
                     selectedDrink.setText("SELECTED DRINK : "+btn_group.getSelection().getActionCommand());
             }
             else{
+                
+                while (rs.next())
+                    {
+                        float stock  =  Float.parseFloat(rs.getString("stock"));
+                        float newstock = stock -1;
+                        String UpdateQuery = "UPDATE product SET stock ="+ newstock +"" ;
+                        ps = con.prepareStatement(UpdateQuery);
+                        ps.executeUpdate();
+                    }
+                
                 change = amount - drinks.getPrice4();
                 warningText.setText("✔");
                 changeText.setText("CHANGE RM: "+df.format(change));
@@ -456,6 +548,7 @@ public class VendingUI extends javax.swing.JFrame {
             }
         }
         else {
+            PID=5;
             amount = Double.parseDouble(amt_txt.getText());
             if (amount < drinks.getPrice5()){
                 changeText.setText("CHANGE : ----");
@@ -463,12 +556,32 @@ public class VendingUI extends javax.swing.JFrame {
                 warningText.setText("Insufficient Amount for this drink");
             }
             else if (amount == drinks.getPrice5()){
+                
+                while (rs.next())
+                    {
+                        float stock  =  Float.parseFloat(rs.getString("stock"));
+                        float newstock = stock -1;
+                        String UpdateQuery = "UPDATE product SET stock ="+ newstock +"" ;
+                        ps = con.prepareStatement(UpdateQuery);
+                        ps.executeUpdate();
+                    }
+                
                     warningText.setText("✔");
                     changeText.setText("CHANGE : RM0");
                     dispensed_txt.setText("1 "+drinks.getDrink5()+" DISPENSED");
                     selectedDrink.setText("SELECTED DRINK : "+btn_group.getSelection().getActionCommand());
             }
             else{
+                
+                while (rs.next())
+                    {
+                        float stock  =  Float.parseFloat(rs.getString("stock"));
+                        float newstock = stock -1;
+                        String UpdateQuery = "UPDATE product SET stock ="+ newstock +"" ;
+                        ps = con.prepareStatement(UpdateQuery);
+                        ps.executeUpdate();
+                    }
+                
                 change = amount - drinks.getPrice5();
                 Math.round(change);
                 warningText.setText("✔");
@@ -477,6 +590,8 @@ public class VendingUI extends javax.swing.JFrame {
                 selectedDrink.setText("SELECTED DRINK : "+btn_group.getSelection().getActionCommand());
             }
         }
+       }
+       catch(Exception e){JOptionPane.showMessageDialog(null,e.getMessage());}
     }//GEN-LAST:event_buyDrink_btnActionPerformed
 
     private void option_oneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_option_oneActionPerformed
@@ -628,6 +743,7 @@ public class VendingUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(VendingUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -659,6 +775,8 @@ public class VendingUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JRadioButton option_five;
     private javax.swing.JRadioButton option_four;
     private javax.swing.JRadioButton option_one;
